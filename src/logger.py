@@ -5,5 +5,5 @@ class Action(Enum):
     END = '[END]'
 
 
-def t(entity:any, action:Action):
-    print(action.value, entity)
+def t(entity:any, action:Action, env):
+    print(action.value, env.now, entity, '\n')
