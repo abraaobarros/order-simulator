@@ -96,7 +96,7 @@ class ShelfTestCase(unittest.TestCase):
         hot_orders = [o for o in core.orders if o.temp == 'hot']
         freeze_orders = [o for o in core.orders if o.temp == 'frozen']
 
-        def discard(self , cordinator: ShelvesCoordinator):
+        def discard(self, cordinator: ShelvesCoordinator):
             pass
 
         coordinator = ShelvesCoordinator(

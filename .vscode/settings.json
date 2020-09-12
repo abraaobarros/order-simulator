@@ -4,13 +4,9 @@
         "-s",
         "./src",
         "-p",
-        "*test.py"
+        "test_*.py"
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.nosetestsEnabled": false,
-    "python.testing.unittestEnabled": true,
-    "python.pythonPath": "/usr/bin/python",
-    "python.testing.pytestArgs": [
-        "__tests__"
-    ]
+    "python.testing.unittestEnabled": true
 }
