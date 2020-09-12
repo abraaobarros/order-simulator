@@ -1,7 +1,6 @@
 import unittest
 import sys
 
-sys.path.insert(0, '/root/cloudkitchen/lib')
 from ckitchen import CKitchen
 
 class CoreTestCase(unittest.TestCase):
