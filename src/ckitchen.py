@@ -1,7 +1,7 @@
 import simpy
-from enum import Enum
-from order import Order
-from shelf import SimpleShelf, OverflowShelf, ShelvesCoordinator
+
+from src.order import Order
+from src.shelf import ShelvesCoordinator
 
 
 class CKParameters(object):

@@ -1,10 +1,10 @@
 import unittest
 import sys
 
-from ckitchen import *
-from helpers import get_initial_orders
-from shelf import *
-from order import *
+from src.ckitchen import *
+from src.helpers import get_initial_orders
+from src.shelf import *
+from src.order import *
 
 
 class ShelfTestCase(unittest.TestCase):
@@ -96,11 +96,11 @@ class ShelfTestCase(unittest.TestCase):
         hot_orders = [o for o in core.orders if o.temp == 'hot']
         freeze_orders = [o for o in core.orders if o.temp == 'frozen']
 
-        def discart(self, cordinator: ShelvesCoordinator):
+        def discard(self , cordinator: ShelvesCoordinator):
             pass
 
         coordinator = ShelvesCoordinator(
-            core, overflow_capacity=1, overflowFullFunc=discart)
+            core, overflow_capacity=1, overflowFullFunc=discard)
         coordinator.addShelf('hot', 1)
         coordinator.addShelf('frozen', 1)
         coordinator.put(hot_orders.pop())

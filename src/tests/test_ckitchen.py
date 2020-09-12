@@ -1,12 +1,12 @@
 import unittest
-import sys
 
-from ckitchen import *
-from helpers import get_initial_orders
+from src.ckitchen import CKitchen, CKParameters
+from src.helpers import get_initial_orders
 
 
 class CoreTestCase(unittest.TestCase):
     def test_should_init_core(self):
+
         core = CKitchen()
         self.assertIsNotNone(CKitchen, 'should init class')
 

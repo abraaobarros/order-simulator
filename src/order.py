@@ -1,5 +1,7 @@
 import simpy
-from logger import t, Action
+
+from src.logger import t, Action
+
 
 class Order(simpy.Event):
     def __init__(self, json):
@@ -13,7 +15,6 @@ class Order(simpy.Event):
     def dispatch(self, env):
         t(self, Action.START, env)
         t(self, Action.END, env)
-
 
     def __repr__(self):
         return 'Order {}'.format(self.id)

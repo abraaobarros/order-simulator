@@ -1,5 +1,5 @@
 import simpy
-from logger import t, Action
+from src.logger import t, Action
 
 
 class SimpleShelf(simpy.FilterStore):

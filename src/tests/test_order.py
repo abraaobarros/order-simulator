@@ -1,8 +1,9 @@
 import unittest
 import sys
 
-from order import *
-from helpers import get_initial_orders
+from src.helpers import get_initial_orders
+from src.order import Order
+
 
 class OrderTestCase(unittest.TestCase):
     def test_should_init_order(self):
