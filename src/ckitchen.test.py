@@ -29,7 +29,8 @@ class CoreTestCase(unittest.TestCase):
         core = CKitchen(small_subSet, parameters=CKParameters)
         core.simulate()
         core.run()
-        self.assertEqual(core._now, 1, 'should dispatch only 2 orders per second') 
+        self.assertEqual(core._now, 1, 'should dispatch only 2 orders per second')
+
 
 
 

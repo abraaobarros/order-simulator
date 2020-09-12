@@ -16,5 +16,7 @@ class Order(simpy.Event):
 
 
     def __repr__(self):
-        return 'Order {} - {}'.format(self.id, self.name)
+        return 'Order {}'.format(self.id)
 
+    def __eq__(self, other):
+        return self.id == other.id

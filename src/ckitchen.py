@@ -1,6 +1,7 @@
 import simpy
 from enum import Enum
 from order import Order
+from shelf import SimpleShelf, OverflowShelf, ShelvesCoordinator
 
 class CKParameters(object):
     RANDOM_SEED = 42
@@ -14,6 +15,7 @@ class CKitchen(simpy.Environment):
         super().__init__()
         self.orders = list([Order(order) for order in orders])
         self.parameters = parameters
+        self.shelves = ShelvesCoordinator(self)
 
     
     def simulate(self):
@@ -23,3 +25,4 @@ class CKitchen(simpy.Environment):
         for order in self.orders:
             order.dispatch(self)
             yield self.timeout(self.parameters.INTERVAL_ORDERS)
+
