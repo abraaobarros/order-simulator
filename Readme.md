@@ -103,15 +103,6 @@ def main():
 
 ```
 
-### another way to run the simulation
-
-Inside the project folder, run it:
-
-```
-pip install ./
-ckitchen --interval_orders 0.5 --max_courier_time 6 --min_courier_time 2 --overflow_decay_modifier 2 --normal_decay 1
-
-```
 
 ## Test Coverage:
 
