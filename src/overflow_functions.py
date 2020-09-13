@@ -16,7 +16,7 @@ def move_available_shelf_full_overflow(coordinator, order: Order):
 
 
 def discard_full_overflow(coordinator, order: Order):
-    print('[D] {} {}'.format(order, coordinator))
+    print('[  discarded  ] {} {}'.format(order, coordinator))
 
 
 def discard_randomly_full_overflow(coordinator, order: Order):
@@ -29,3 +29,6 @@ def move_and_discard_ramdomly_full_overflow(coordinator, order: Order):
     res = move_available_shelf_full_overflow(coordinator, order)
     if(not res):
         discard_randomly_full_overflow(coordinator, order)
+        print('{:2.2f} [  discard  ] {}'.format(coordinator.env.now, order))
+    else:
+        print('{:2.2f} [    moved    ] {}'.format(coordinator.env.now, order))
