@@ -14,7 +14,7 @@ def main():
     parameters.NORMAL_DECAY_MODIFIER = 1
     core = CKitchen(orders, parameters=parameters, factor=1)
     core.simulate()
-    core.run(until=30)
+    core.run()
 
 
 def cli():
@@ -43,7 +43,7 @@ def cli():
 
     core = CKitchen(orders, parameters=parameters)
     core.simulate()
-    core.run(until=10)
+    core.run()
 
 
 if __name__ == '__main__':

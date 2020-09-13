@@ -3,6 +3,7 @@ from src.overflow_functions import *
 
 
 class SimpleShelf(simpy.FilterStore):
+
     def __init__(self, env, capacity):
         super().__init__(env,  capacity)
         self.env = env
@@ -52,7 +53,9 @@ class OverflowShelf(SimpleShelf):
 
 
 class ShelvesCoordinator(simpy.Event):
-    def __init__(self, env, overflow_capacity=10, overflowFullFunc=move_and_discard_ramdomly_full_overflow):
+    """Coordinator of shelves and overflow, implements centralized put and get from outside"""
+
+    def __init__(self, env, overflow_capacity=10, overflowFullFunc=move_and_discard_randomly_full_overflow):
         super()
         self.env = env
         self.shelves = {}
@@ -83,14 +86,14 @@ class ShelvesCoordinator(simpy.Event):
     def get(self, order):
         shelf_name = self.where_is(order)
         if(shelf_name == 'missing'):
-            print('{:2.2f} [   missing   ] {} '.format(self.env.now, order))
+            print('{:2.2f} [     gone    ] {} '.format(self.env.now, order))
             return None
         elif(shelf_name == 'overflow'):
-            print('{:2.2f} [   pickup    ] {} from: [overflow]'.format(
+            print('{:2.2f} [    picked   ] {} from: [overflow]'.format(
                 self.env.now, order))
             return self.overflow.get_by_order_id(order.id)
         else:
-            print('{:2.2f} [   pickup    ] {} from: [{}]'.format(
+            print('{:2.2f} [   picked    ] {} from: [{}]'.format(
                 self.env.now, order, order.temp))
             return self.shelves[shelf_name].get_by_order_id(order.id)
 

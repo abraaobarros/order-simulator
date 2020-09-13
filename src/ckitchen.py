@@ -1,11 +1,18 @@
 import simpy
-
+import random
 from src.order import Order
 from src.shelf import ShelvesCoordinator
 from src.courier import Courier
 
 
 class CKParameters(object):
+    """  Parameters to customize the simulation 
+        _RANDOM_SEED_ - seed to reproduce the data given by a pseudo-random and get the same result
+        _INTERVAL_ORDERS_ = Interval between orders. ex. 0.5 = 2orders/s
+        _MIN_COURIER_TIME_ = Minimum time to courier arrive to get the order on pickup area
+        _MAX_COURIER_TIME_ = Max time to courier arrive to get the order on pickup area
+        _OVERFLOW_DECAY_MODIFIER_ = Modifier that multiplies order value formula to decay faster when they are in overflow shelf.
+    """
     RANDOM_SEED = 42
     INTERVAL_ORDERS = 0.5
     MIN_COURIER_TIME = 2
@@ -15,9 +22,23 @@ class CKParameters(object):
 
 
 class CKitchen(simpy.rt.RealtimeEnvironment):
+    """
+        _factor_ - It is the simulator velocity
+
+        Possible events: 
+        _[received]_ - delivery order enter on sistem
+        _[picked]_ - courier take out order item on a shelf
+        _[wasted]_ - order item can not be delivered because its value is less than zero
+        _[not found]_ - courier release order process because the item is not on any shelve
+        _[moved]_ - if the overflow shelf is full, this action happens when is possible to move some item to the right temp shelf and put the upcoming order on overflow
+        _[gone]_ - when the courier look if his order was on the pickup area and it was not there
+        _[discarded]_ - when the movement between shelves is not possible, a random item from overflow is discarded
+        _[delivered]_ - when the courier delivers the order.
+    """
 
     def __init__(self, orders=[], parameters=CKParameters, coordinator=None, factor=1):
         super().__init__(factor=factor)
+        random.seed(parameters.RANDOM_SEED)
         self.orders = list([Order(order, self) for order in orders])
         self.parameters = parameters
         if(coordinator is None):
@@ -52,6 +73,3 @@ class CKitchen(simpy.rt.RealtimeEnvironment):
                 courier.discard(order)
         else:
             courier.missing(order)
-
-    def __repr__(self):
-        return " {} {} ".format(self.orders, self.coordinator)

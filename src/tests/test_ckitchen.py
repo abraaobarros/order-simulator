@@ -5,6 +5,7 @@ from src.helpers import get_initial_orders
 
 
 class CoreTestCase(unittest.TestCase):
+
     def test_should_init_core(self):
         core = CKitchen()
         self.assertIsNotNone(CKitchen, 'should init class')
