@@ -1,6 +1,6 @@
 # Engineering Challenge Homework
 
-For the Discrete-Event Simulation of a centralized delivery kitchen, I chose python with simpy to simulate the environment and run the real-time simulation. I found on simpy a simple use of functions generators to solve the resources concurrence problem. I used 'Resource', 'Event', and 'Environment' from simpy as a foundation of our model.
+For the Discrete-Event Simulation of a centralized delivery kitchen, I chose python with simpy to simulate the environment and run the real-time simulation. I found on simpy a simple use of functions generators to solve the resources concurrence problem. I used Resource, Event, and Environment from simpy as our model's foundation.
 
 The simpy documentation can be found here: https://simpy.readthedocs.io/en/latest/
 
@@ -8,15 +8,14 @@ The simpy documentation can be found here: https://simpy.readthedocs.io/en/lates
 
 ### Quickstart:
 
-Run it inside folder project. Make sure you are using python 3.6+
+Run it inside the folder project. Make sure you are using python 3.6+
 
 ```python
 pip install -r requirements.txt
 
 ```
 
-Run it on terminal:
-
+Run it from terminal:
 ```python
 
 python main.py
@@ -37,35 +36,77 @@ Each line has the same format:
 ### Events descriptions:
 *[order]* - delivery order enter on sistem
 
-*[pickup]* - courier take out order item on shelf
+*[pickup]* - courier take out order item on a shelf
 
-*[wasted]* - order item can not be delivery because it value is less than zero
+*[wasted]* - order item can not be delivered because its value is less than zero
 
 *[not found]* - courier release order process because the item is not on any shelve
 
-*[moved]* - if overflow shelf is full, this action happens when is possible to move some item to right temp shelf and put the upcomming order on overflow
+*[moved]* - if the overflow shelf is full, this action happens when is possible to move some item to the right temp shelf and put the upcoming order on overflow
 
-*[missing]* - when courier look if his order was on pickup area and it was not there
+*[missing]* - when the courier look if his order was on the pickup area and it was not there
 
-*[discard]* - when the movement is not possible, the item is discarded 
+*[discard]* - when the movement between shelves is not possible, a random item from overflow is discarded 
 
-*[delivered]* - when the courier deliver the order.
+*[delivered]* - when the courier delivers the order.
 
-### Parameters description:
-*RANDOM_SEED* - seed to reproduce the data given by a pseudo-random and get same result 
+
+
+
+## Customizing simulation
+
+The architecture was made to change the simulation parameters easily.
+
+
+
+### Changing basic parameters
+```python 
+def main():
+    orders = get_initial_orders()
+    parameters = CKParameters()
+    parameters.INTERVAL_ORDERS = 0.5
+    parameters.MAX_COURIER_TIME = 2
+    parameters.MIN_COURIER_TIME = 6
+    parameters.OVERFLOW_DECAY_MODIFIER = 2
+    parameters.NORMAL_DECAY_MODIFIER = 1
+    core = CKitchen(orders, parameters=parameters, factor=1)
+    core.simulate()
+    core.run(until=30)
+
+```
+Definition: 
+*RANDOM_SEED* - seed to reproduce the data given by a pseudo-random and get the same result 
 
 *INTERVAL_ORDERS* = Interval between orders. ex.  0.5 = 2orders/s
 
-*MIN_COURIER_TIME* = Minimum time to courier arrive to get order on pickup area
+*MIN_COURIER_TIME* = Minimum time to courier arrive to get the order on pickup area
 
-*MAX_COURIER_TIME* = Max time to courier arrive to get order on pickup area
+*MAX_COURIER_TIME* = Max time to courier arrive to get the order on pickup area
 
-*OVERFLOW_DECAY_MODIFIER* = Modifier that multiply order value formula to decay faster when they are in overflow shelf.
+*OVERFLOW_DECAY_MODIFIER* = Modifier that multiplies order value formula to decay faster when they are in overflow shelf.
+
+*factor* = Simulation velocity.
+
+### Changing Shelves structure:
+
+The structure of the shelves Coordinator was designed to be is flexible. It is possible to add many shelves as you can with any capacity. Moreover, It is possible to change the full-stack overflow behavior, just sending another function on the constructor. I did that way to build the full-stack overflow logic increasingly with TDD. 
+
+```python 
+def main():
+    orders = get_initial_orders()
+    core = CKitchen(orders, parameters=parameters, factor=1)
+    coordinator = ShelvesCoordinator(core, overflow_capacity=1, overflowFullFunc=discard_full_overflow)
+    coordinator.addShelf('hot', 1)
+    coordinator.addShelf('frozen', 1)
+    core.setCoordinator(coordinator)
+    core.simulate()
+    core.run(until=30)
+
+```
 
 
-## Change parameters
 
-### other way to run the simulation 
+### another way to run the simulation 
 Inside the project folder, run it:
 ```
 pip3 install ./
