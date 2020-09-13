@@ -1,5 +1,6 @@
 import simpy
 from src.logger import t, Action
+from src.overflow_functions import *
 
 
 class SimpleShelf(simpy.FilterStore):
@@ -41,13 +42,19 @@ class OverflowShelf(SimpleShelf):
     def __init__(self, env, capacity):
         super().__init__(env, capacity)
 
+    def get_by_temp(self, temp):
+        for item in self.items:
+            if(item.temp == temp):
+                return item
+        return item
+
     def put(self, item):
         item.setShelfDecayModifier(self.env.parameters.OVERFLOW_DECAY_MODIFIER)
         super().put(item)
 
 
 class ShelvesCoordinator(simpy.Event):
-    def __init__(self, env, overflow_capacity=10, overflowFullFunc=None):
+    def __init__(self, env, overflow_capacity=10, overflowFullFunc=move_available_shelf_full_overflow):
         super()
         self.env = env
         self.shelves = {}

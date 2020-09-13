@@ -28,6 +28,9 @@ class CKitchen(simpy.Environment):
         else:
             self.coordinator = coordinator
 
+    def setCoordinator(self, coordinator):
+        self.coordinator = coordinator
+
     def simulate(self):
         self.process(self.dispatch_orders())
 

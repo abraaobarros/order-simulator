@@ -118,24 +118,6 @@ class ShelfTestCase(unittest.TestCase):
         self.assertIsNotNone(coordinator.get(order))
         self.assertIsNone(coordinator.get(order_missing))
 
-    def test_moving_overflow_before_discard(self):
-
-        core = CKitchen(get_initial_orders())
-        hot_orders = [o for o in core.orders if o.temp == 'hot']
-        freeze_orders = [o for o in core.orders if o.temp == 'frozen']
-        coordinator = ShelvesCoordinator(core, overflow_capacity=1)
-        coordinator.addShelf('hot', 1)
-        coordinator.addShelf('frozen', 1)
-        first_order = freeze_orders.pop()
-        second_order = freeze_orders.pop()
-        coordinator.put(first_order)
-        coordinator.put(hot_orders.pop())
-        coordinator.put(second_order)
-
-        coordinator.get(first_order)
-        coordinator.put(hot_orders.pop())
-        self.assertEqual(coordinator.where_is(second_order), 'frozen')
-
 
 if __name__ == "__main__":
     unittest.main()
