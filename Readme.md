@@ -25,7 +25,8 @@ python main.py
 ```
 
 So, this should be enough to run the project and start the simulation:
-![First run](./src/resources/report.png)
+
+![First run](./src/resources/first_run.png)
 
     requirements python3
 
