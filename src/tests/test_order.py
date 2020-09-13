@@ -1,5 +1,4 @@
 import unittest
-import sys
 
 from src.helpers import get_initial_orders
 from src.order import Order
@@ -19,13 +18,8 @@ class OrderTestCase(unittest.TestCase):
         self.assertEqual(order.shelfLife, orders_list[0]['shelfLife'])
         self.assertEqual(order.decayRate, orders_list[0]['decayRate'])
 
-    
     def test_calculate_initial_value_after_dispatched(self):
         pass
-
-
-    
-    
 
 
 if __name__ == "__main__":

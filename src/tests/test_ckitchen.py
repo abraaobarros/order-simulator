@@ -6,7 +6,6 @@ from src.helpers import get_initial_orders
 
 class CoreTestCase(unittest.TestCase):
     def test_should_init_core(self):
-
         core = CKitchen()
         self.assertIsNotNone(CKitchen, 'should init class')
 
@@ -38,10 +37,11 @@ class CoreTestCase(unittest.TestCase):
 
     def test_filling_shelves(self):
         small_subSet = get_initial_orders()
-        core = CKitchen(small_subSet)
+        parameters = CKParameters
+        parameters.INTERVAL_ORDERS = 0.5
+        core = CKitchen(small_subSet, parameters=CKParameters)
         core.simulate()
         core.run(until=30)
-        print(core)
 
 
 if __name__ == "__main__":

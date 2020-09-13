@@ -13,8 +13,7 @@ class Order(simpy.Event):
         self.decayRate = json['decayRate']
 
     def dispatch(self, env):
-        t(self, Action.START, env)
-        t(self, Action.END, env)
+        pass
 
     def __repr__(self):
         return 'Order {}'.format(self.id)

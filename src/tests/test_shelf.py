@@ -64,20 +64,6 @@ class ShelfTestCase(unittest.TestCase):
         coordinator.put(freeze_orders.pop())
         self.assertEqual(len(coordinator.overflow), 2)
 
-    def test_overflow_all_stack_rise_error(self):
-        core = CKitchen(get_initial_orders())
-        hot_orders = [o for o in core.orders if o.temp == 'hot']
-        freeze_orders = [o for o in core.orders if o.temp == 'frozen']
-        coordinator = ShelvesCoordinator(core, overflow_capacity=1)
-        coordinator.addShelf('hot', 1)
-        coordinator.addShelf('frozen', 1)
-        coordinator.put(hot_orders.pop())
-        coordinator.put(hot_orders.pop())
-        coordinator.put(freeze_orders.pop())
-
-        with self.assertRaises(OverflowFullStackError) as context:
-            coordinator.put(freeze_orders.pop())
-
     def test_find_some_order_to_take_from_overflow_to_shelf(self):
         core = CKitchen(get_initial_orders())
         hot_orders = [o for o in core.orders if o.temp == 'hot']
@@ -97,7 +83,7 @@ class ShelfTestCase(unittest.TestCase):
         freeze_orders = [o for o in core.orders if o.temp == 'frozen']
 
         def discard(self, cordinator: ShelvesCoordinator):
-            pass
+            print('Discard')
 
         coordinator = ShelvesCoordinator(
             core, overflow_capacity=1, overflowFullFunc=discard)
@@ -107,6 +93,30 @@ class ShelfTestCase(unittest.TestCase):
         coordinator.put(hot_orders.pop())
         coordinator.put(freeze_orders.pop())
         coordinator.put(freeze_orders.pop())
+        coordinator.put(freeze_orders.pop())
+
+    def test_get_from_coordinator(self):
+        core = CKitchen(get_initial_orders())
+        hot_orders = [o for o in core.orders if o.temp == 'hot']
+        coordinator = ShelvesCoordinator(core, overflow_capacity=1)
+        coordinator.addShelf('hot', 2)
+        order = hot_orders.pop()
+        coordinator.put(hot_orders.pop())
+        coordinator.put(order)
+
+        self.assertEqual(coordinator.where_is(order), 'hot')
+
+        order_overflow = hot_orders.pop()
+        coordinator.put(order_overflow)
+
+        self.assertEqual(coordinator.where_is(order_overflow), 'overflow')
+
+        order_missing = hot_orders.pop()
+        self.assertEqual(coordinator.where_is(order_missing), 'missing')
+
+        self.assertIsNotNone(coordinator.get(order_overflow))
+        self.assertIsNotNone(coordinator.get(order))
+        self.assertIsNone(coordinator.get(order_missing))
 
 
 if __name__ == "__main__":

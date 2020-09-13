@@ -12,7 +12,7 @@ class SimpleShelf(simpy.FilterStore):
 
     def __repr__(self):
         if self.isFull():
-            return '[FULL] Shelf {} {}'.format(self.items)
+            return '[FULL] Shelf {}'.format(self.items)
         return 'Shelf {}'.format(self.items)
 
     def get_by_order_id(self, order_id):
@@ -41,7 +41,7 @@ class OverflowShelf(SimpleShelf):
         super().__init__(env, capacity)
 
 
-class ShelvesCoordinator(object):
+class ShelvesCoordinator(simpy.Event):
     def __init__(self, env, overflow_capacity=10, overflowFullFunc=None):
         super()
         self.env = env
@@ -53,21 +53,39 @@ class ShelvesCoordinator(object):
         self.shelves[name] = SimpleShelf(env=self.env, capacity=capacity)
 
     def put(self, order):
+        pass
         if(self.shelves[order.temp].isFull()):
             if(self.overflow.isFull()):
                 if self.overflowFullFunc is not None:
                     self.overflowFullFunc(self, order)
                 else:
-                    raise OverflowFullStackError()
+                    pass
             self.overflow.put(order)
         else:
             self.shelves[order.temp].put(order)
+
+    def where_is(self, order):
+        if(order in self.shelves[order.temp].items):
+            return order.temp
+        elif(order in self.overflow.items):
+            return 'overflow'
+        else:
+            return 'missing'
+
+    def get(self, order):
+        shelf_name = self.where_is(order)
+        if(shelf_name == 'missing'):
+            return None
+        elif(shelf_name == 'overflow'):
+            return self.overflow.get_by_order_id(order.id)
+        else:
+            return self.shelves[shelf_name].get_by_order_id(order.id)
 
     def __repr__(self):
         text = "\n\nCoordinator \n"
         for key in self.shelves:
             text += "[{}] {} \n".format(key, self.shelves[key].__repr__())
-        text += self.overflow.__repr__() + '\n'
+        text += '[{}] {}'.format('overflow', self.overflow.__repr__()) + '\n'
         return text
 
 

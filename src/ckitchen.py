@@ -2,6 +2,7 @@ import simpy
 
 from src.order import Order
 from src.shelf import ShelvesCoordinator
+from src.courier import Courier
 
 
 class CKParameters(object):
@@ -24,12 +25,23 @@ class CKitchen(simpy.Environment):
 
     def simulate(self):
         self.process(self.dispatch_orders())
+        self.process(self.monitoring_shelves())
+
+    def monitoring_shelves(self):
+        while True:
+            yield self.timeout(1)
+            print(self.now, self.coordinator)
 
     def dispatch_orders(self):
         for order in self.orders:
-            order.dispatch(self)
-            req = self.coordinator.put(order)
+            self.coordinator.put(order)
+            self.process(self.dispatch_courier(order))
             yield self.timeout(self.parameters.INTERVAL_ORDERS)
+
+    def dispatch_courier(self, order):
+        courier = Courier(self, order)
+        yield self.timeout(courier.time)
+        self.coordinator.shelves[order.temp].get_by_order_id(order.id)
 
     def __repr__(self):
         return " {} {} ".format(self.orders, self.coordinator)
