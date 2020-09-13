@@ -12,8 +12,5 @@ class Courier(simpy.Event):
         self.time = random.uniform(2, 6)
         print(self)
 
-    def dispatch(self, env):
-        pass
-
     def __repr__(self):
-        return 'Corrier {} - {}'.format(self.order.id, self.order.name)
+        return '{:.0f} [C] {}... - {}'.format(self.env.now, self.order.id[0:5], self.order.name)

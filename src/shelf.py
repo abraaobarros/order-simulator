@@ -75,17 +75,20 @@ class ShelvesCoordinator(simpy.Event):
     def get(self, order):
         shelf_name = self.where_is(order)
         if(shelf_name == 'missing'):
+            print('{:.0f} [D] {}[missing]'.format(self.env.now, order))
             return None
         elif(shelf_name == 'overflow'):
+            print('{:.0f} [D] {}[overflow]'.format(self.env.now, order))
             return self.overflow.get_by_order_id(order.id)
         else:
+            print('{:.0f} [D] {}[{}]'.format(self.env.now, order, order.temp))
             return self.shelves[shelf_name].get_by_order_id(order.id)
 
     def __repr__(self):
-        text = "\n\nCoordinator \n"
+        text = "[S]:"
         for key in self.shelves:
-            text += "[{}] {} \n".format(key, self.shelves[key].__repr__())
-        text += '[{}] {}'.format('overflow', self.overflow.__repr__()) + '\n'
+            text += "[{}] {} ".format(key, len(self.shelves[key]))
+        text += '[{}]:{}'.format('overflow', len(self.overflow))
         return text
 
 

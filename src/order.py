@@ -12,11 +12,11 @@ class Order(simpy.Event):
         self.shelfLife = json['shelfLife']
         self.decayRate = json['decayRate']
 
-    def dispatch(self, env):
-        pass
+    def dispatch(self):
+        print(self)
 
     def __repr__(self):
-        return 'Order {}'.format(self.id)
+        return '[O] {} - {}[{}]'.format(self.id[0:5], self.name, self.temp)
 
     def __eq__(self, other):
         return self.id == other.id

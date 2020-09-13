@@ -34,14 +34,18 @@ class CKitchen(simpy.Environment):
 
     def dispatch_orders(self):
         for order in self.orders:
+            order.dispatch()
             self.coordinator.put(order)
             self.process(self.dispatch_courier(order))
             yield self.timeout(self.parameters.INTERVAL_ORDERS)
 
+    def all_of(self):
+        print(self.coordinator)
+
     def dispatch_courier(self, order):
         courier = Courier(self, order)
         yield self.timeout(courier.time)
-        self.coordinator.shelves[order.temp].get_by_order_id(order.id)
+        self.coordinator.get(order)
 
     def __repr__(self):
         return " {} {} ".format(self.orders, self.coordinator)
