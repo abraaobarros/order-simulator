@@ -25,21 +25,11 @@ class CoreTestCase(unittest.TestCase):
         self.assertEqual(core.parameters.INTERVAL_ORDERS, 4,
                          'parameter set is not working propertly')
 
-    def test_initial_order_dispatch(self):
-        small_subSet = get_initial_orders()[0:2]
-        parameters = CKParameters
-        parameters.INTERVAL_ORDERS = 0.5
-        core = CKitchen(small_subSet, parameters=CKParameters)
-        core.simulate()
-        core.run()
-        self.assertEqual(
-            core._now, 1, 'should dispatch only 2 orders per second')
-
     def test_filling_shelves(self):
         small_subSet = get_initial_orders()
-        parameters = CKParameters
+        parameters = CKParameters()
         parameters.INTERVAL_ORDERS = 0.5
-        core = CKitchen(small_subSet, parameters=CKParameters)
+        core = CKitchen(small_subSet, parameters=parameters)
         core.simulate()
         core.run(until=30)
 

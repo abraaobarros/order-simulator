@@ -8,6 +8,7 @@ class SimpleShelf(simpy.FilterStore):
         self.env = env
 
     def put(self, item):
+        item.setShelfDecayModifier(self.env.parameters.NORMAL_DECAY_MODIFIER)
         super().put(item)
 
     def __repr__(self):
@@ -40,6 +41,10 @@ class OverflowShelf(SimpleShelf):
     def __init__(self, env, capacity):
         super().__init__(env, capacity)
 
+    def put(self, item):
+        item.setShelfDecayModifier(self.env.parameters.OVERFLOW_DECAY_MODIFIER)
+        super().put(item)
+
 
 class ShelvesCoordinator(simpy.Event):
     def __init__(self, env, overflow_capacity=10, overflowFullFunc=None):
@@ -55,18 +60,12 @@ class ShelvesCoordinator(simpy.Event):
     def put(self, order):
         if(self.shelves[order.temp].isFull()):
             if(self.overflow.isFull()):
-                self.move_some_order_to_available_shelf(order)
-            self.overflow.put(order)
+                if(self.overflowFullFunc):
+                    self.overflowFullFunc(self, order)
+            else:
+                self.overflow.put(order)
         else:
             self.shelves[order.temp].put(order)
-
-    def move_some_order_to_available_shelf(self, order):
-        for temp, shelf in self.shelves:
-            if is not shelf.isFull() and self.overflow.has_order_temp(temp):
-                item = self.overflow.get_by_temp(temp)
-                self.put(item)
-                self.overflow.put(item)
-                return
 
     def where_is(self, order):
         if(order in self.shelves[order.temp].items):
@@ -79,13 +78,13 @@ class ShelvesCoordinator(simpy.Event):
     def get(self, order):
         shelf_name = self.where_is(order)
         if(shelf_name == 'missing'):
-            print('{:.0f} [D] {}[missing]'.format(self.env.now, order))
+            print('{:.0f} [R] {}[missing]'.format(self.env.now, order))
             return None
         elif(shelf_name == 'overflow'):
-            print('{:.0f} [D] {}[overflow]'.format(self.env.now, order))
+            print('{:.0f} [R] {}[overflow]'.format(self.env.now, order))
             return self.overflow.get_by_order_id(order.id)
         else:
-            print('{:.0f} [D] {}[{}]'.format(self.env.now, order, order.temp))
+            print('{:.0f} [R] {}[{}]'.format(self.env.now, order, order.temp))
             return self.shelves[shelf_name].get_by_order_id(order.id)
 
     def __repr__(self):

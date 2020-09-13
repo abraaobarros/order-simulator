@@ -2,6 +2,7 @@ import unittest
 
 from src.helpers import get_initial_orders
 from src.order import Order
+from src.ckitchen import CKitchen
 
 
 class OrderTestCase(unittest.TestCase):
@@ -19,7 +20,12 @@ class OrderTestCase(unittest.TestCase):
         self.assertEqual(order.decayRate, orders_list[0]['decayRate'])
 
     def test_calculate_initial_value_after_dispatched(self):
-        pass
+        core = CKitchen(get_initial_orders())
+        order = core.orders[0]
+        core.simulate()
+        core.run(until=100)
+        order.value()
+        self.assertLess(order.value(), 0)
 
 
 if __name__ == "__main__":
