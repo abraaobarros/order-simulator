@@ -1,22 +1,32 @@
 # Engineering Challenge Homework
 
-Discrete-Event Simulation of delivery centrilized kitchen
+Discrete-Event Simulation of delivery centrilized kitchen. For this test, I choose python with simpy to simulate the enviroument and run the realtime simulation.
+I found on simpy a simple use of python generators to solve resources concurrence problem. I used just Resources, Events and Enviroment as a foundation of our model.
+
+You can find simpy documentation at this link: https://simpy.readthedocs.io/en/latest/
 
 # Installation:
 
 ### Quickstart:
 
-Run this script on the folder of the project
+Run it inside folder project. Make sure you are using python 3.6+
 
 ```python
-	pip install -r requirements.txt
+pip install -r requirements.txt
+
 ```
 
-Running on terminal:
+Run it on terminal:
 
 ```python
-	python main.py
+
+python main.py
+
 ```
+
+So, this should be enought to run the project and start the simulation:
+
+
 
     requirements python3
 
