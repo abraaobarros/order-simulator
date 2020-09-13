@@ -1,6 +1,6 @@
 # Engineering Challenge Homework
 
-For the Discrete-Event Simulation of a centralized delivery kitchen, I chose python with simpy to simulate the environment and run the real-time simulation. I found on simpy a simple use of functions generators to solve the resources concurrence problem. I used Resource, Event, and Environment from simpy as our model's foundation.
+For the Discrete-Event Simulation of a centralized delivery kitchen, I chose python with simpy to simulate the environment and run the real-time simulation. I found on simpy a simple use of generator function to solve the resources concurrence problem. I used Resource, Event, and Environment from simpy as our model's foundation.
 
 The simpy documentation can be found here: https://simpy.readthedocs.io/en/latest/
 
@@ -32,13 +32,13 @@ So, this should be enough to run the project and start the simulation:
 Each line has the same format:
 | tick | event | order_id | order_name | order_temp | order_value | decayFactor | Resources |
 |-------|---------|----------|------------|--------|-------|-------------|----------------------------------|
-| float | [order] [delivered] [pickup] [wasted] [not found] [moved] [missing] [discard] | hash | string | string | float | int | [hot] [frozen] [cold] [overflow] |
+| float | [received] [picked] [wasted] [not found] [moved] [moved] [gone] [discarded] [delivered] | hash | string | string | float | int | [hot] [frozen] [cold] [overflow] |
 
 ### Events descriptions:
 
-_[order]_ - delivery order enter on sistem
+_[received]_ - delivery order enter on sistem
 
-_[pickup]_ - courier take out order item on a shelf
+_[picked]_ - courier take out order item on a shelf
 
 _[wasted]_ - order item can not be delivered because its value is less than zero
 
@@ -46,9 +46,9 @@ _[not found]_ - courier release order process because the item is not on any she
 
 _[moved]_ - if the overflow shelf is full, this action happens when is possible to move some item to the right temp shelf and put the upcoming order on overflow
 
-_[missing]_ - when the courier look if his order was on the pickup area and it was not there
+_[gone]_ - when the courier look if his order was on the pickup area and it was not there
 
-_[discard]_ - when the movement between shelves is not possible, a random item from overflow is discarded
+_[discarded]_ - when the movement between shelves is not possible, a random item from overflow is discarded
 
 _[delivered]_ - when the courier delivers the order.
 
