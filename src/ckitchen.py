@@ -16,8 +16,8 @@ class CKParameters(object):
 
 class CKitchen(simpy.rt.RealtimeEnvironment):
 
-    def __init__(self, orders=[], parameters=CKParameters, coordinator=None):
-        super().__init__(factor=0.1)
+    def __init__(self, orders=[], parameters=CKParameters, coordinator=None, factor=1):
+        super().__init__(factor=factor)
         self.orders = list([Order(order, self) for order in orders])
         self.parameters = parameters
         if(coordinator is None):

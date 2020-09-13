@@ -7,12 +7,12 @@ import getopt
 def main():
     orders = get_initial_orders()
     parameters = CKParameters()
-    parameters.INTERVAL_ORDERS = 0.1
+    parameters.INTERVAL_ORDERS = 0.5
     parameters.MAX_COURIER_TIME = 2
-    parameters.MIN_COURIER_TIME = 16
-    parameters.OVERFLOW_DECAY_MODIFIER = 20
-    parameters.NORMAL_DECAY_MODIFIER = 10
-    core = CKitchen(orders, parameters=parameters)
+    parameters.MIN_COURIER_TIME = 6
+    parameters.OVERFLOW_DECAY_MODIFIER = 2
+    parameters.NORMAL_DECAY_MODIFIER = 1
+    core = CKitchen(orders, parameters=parameters, factor=1)
     core.simulate()
     core.run(until=30)
 
