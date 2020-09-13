@@ -16,7 +16,7 @@ class CKitchen(simpy.Environment):
 
     def __init__(self, orders: [Order] = [], parameters=CKParameters):
         super().__init__()
-        self.orders = list([Order(order) for order in orders])
+        self.orders = list([Order(order, self) for order in orders])
         self.parameters = parameters
         self.coordinator = ShelvesCoordinator(self, 15)
         self.coordinator.addShelf('hot', 10)
@@ -25,12 +25,6 @@ class CKitchen(simpy.Environment):
 
     def simulate(self):
         self.process(self.dispatch_orders())
-        self.process(self.monitoring_shelves())
-
-    def monitoring_shelves(self):
-        while True:
-            yield self.timeout(1)
-            print(self.now, self.coordinator)
 
     def dispatch_orders(self):
         for order in self.orders:

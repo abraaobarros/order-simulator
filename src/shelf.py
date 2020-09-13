@@ -53,16 +53,20 @@ class ShelvesCoordinator(simpy.Event):
         self.shelves[name] = SimpleShelf(env=self.env, capacity=capacity)
 
     def put(self, order):
-        pass
         if(self.shelves[order.temp].isFull()):
             if(self.overflow.isFull()):
-                if self.overflowFullFunc is not None:
-                    self.overflowFullFunc(self, order)
-                else:
-                    pass
+                self.move_some_order_to_available_shelf(order)
             self.overflow.put(order)
         else:
             self.shelves[order.temp].put(order)
+
+    def move_some_order_to_available_shelf(self, order):
+        for temp, shelf in self.shelves:
+            if is not shelf.isFull() and self.overflow.has_order_temp(temp):
+                item = self.overflow.get_by_temp(temp)
+                self.put(item)
+                self.overflow.put(item)
+                return
 
     def where_is(self, order):
         if(order in self.shelves[order.temp].items):
