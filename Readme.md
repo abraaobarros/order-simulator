@@ -28,6 +28,14 @@ So, this should be enough to run the project and start the simulation:
 
 ![First run](./src/resources/first_run.png)
 
+Each line has the same format: 
+| tick  | event   | order_id | order_name | order_temp   | order_value | decayFactor | Resources                        |
+|-------|---------|----------|------------|--------|-------|-------------|----------------------------------|
+| float | [order] [delivered] [pickup] [wasted] [not found] [moved] [discarded] [discard] | hash     | string     | string | float | int         | [hot] [frozen] [cold] [overflow] |
+
+
+
+
     requirements python3
 
     pip install ./
