@@ -7,6 +7,8 @@ def move_available_shelf_full_overflow(coordinator, order: Order):
         if not coordinator.shelves[temp].isFull() and coordinator.overflow.has_order_temp(temp):
             item = coordinator.overflow.get_by_temp(temp)
             coordinator.get(item)
+            item.setShelfDecayModifier(
+                coordinator.env.parameters.NORMAL_DECAY_MODIFIER)
             coordinator.shelves[temp].put(item)
             coordinator.overflow.put(order)
             return True

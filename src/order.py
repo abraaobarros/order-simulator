@@ -15,10 +15,10 @@ class Order(simpy.Event):
 
     def dispatch(self):
         self.start = self.env.now
-        print('{:.0f} [O] {}'.format(self.env.now, self))
+        print('{:2.2f} [    order    ] {}'.format(self.env.now, self))
 
     def __repr__(self):
-        return '{} - {}{}({:.3f}) - RES: {}'.format(self.id[0:5],  self.name.ljust(25), self.temp.ljust(9), self.value(), self.env.coordinator)
+        return '{} - {}{}({:.3f})*({}) - RES: {}'.format(self.id[0:5],  self.name.ljust(25), self.temp.ljust(9), self.value(), self.shelfDecayModifier, self.env.coordinator)
 
     def value(self):
         return (self.shelfLife - self.decayRate * self.orderAge() * self.shelfDecayModifier)/self.shelfLife

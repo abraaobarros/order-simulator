@@ -1,19 +1,49 @@
-
 from src.ckitchen import *
 from src.helpers import get_initial_orders
+import sys
+import getopt
 
 
 def main():
     orders = get_initial_orders()
     parameters = CKParameters()
-    parameters.INTERVAL_ORDERS = 0.5
-    parameters.MAX_COURIER_TIME = 22
-    parameters.MIN_COURIER_TIME = 28
-    parameters.OVERFLOW_DECAY_MODIFIER = 10
-    parameters.NORMAL_DECAY_MODIFIER = 5
+    parameters.INTERVAL_ORDERS = 0.1
+    parameters.MAX_COURIER_TIME = 2
+    parameters.MIN_COURIER_TIME = 16
+    parameters.OVERFLOW_DECAY_MODIFIER = 20
+    parameters.NORMAL_DECAY_MODIFIER = 10
     core = CKitchen(orders, parameters=parameters)
     core.simulate()
-    core.run()
+    core.run(until=30)
+
+
+def cli():
+    argv = sys.argv
+    orders = get_initial_orders()
+    parameters = CKParameters()
+    if argv.index('--interval_orders') != -1:
+        parameters.INTERVAL_ORDERS = float(
+            argv[argv.index('--interval_orders')+1])
+
+    if argv.index('--max_courier_time') != -1:
+        parameters.MAX_COURIER_TIME = float(
+            argv[argv.index('--max_courier_time')+1])
+
+    if argv.index('--min_courier_time') != -1:
+        parameters.MIN_COURIER_TIME = float(
+            argv[argv.index('--min_courier_time')+1])
+
+    if argv.index('--overflow_decay_modifier') != -1:
+        parameters.OVERFLOW_DECAY_MODIFIER = float(
+            argv[argv.index('--overflow_decay_modifier')+1])
+
+    if argv.index('--normal_decay') != -1:
+        parameters.NORMAL_DECAY_MODIFIER = float(
+            argv[argv.index('--normal_decay')+1])
+
+    core = CKitchen(orders, parameters=parameters)
+    core.simulate()
+    core.run(until=10)
 
 
 if __name__ == '__main__':
