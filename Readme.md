@@ -8,12 +8,14 @@ The simpy documentation can be found here: https://simpy.readthedocs.io/en/lates
 
 ### Quickstart:
 
-Run it inside the folder project. Make sure you are using python 3.6+
+Run it inside the folder project. Make sure you are using python 3.6+ and pip 19+
+
 
 ```python
 pip install -r requirements.txt
 
 ```
+*If you don't have pip or python installed, follow these instructions: [https://stackoverflow.com/questions/6587507/how-to-install-pip-with-python-3]
 
 Run it from terminal:
 
@@ -106,7 +108,7 @@ def main():
 Inside the project folder, run it:
 
 ```
-pip3 install ./
+pip install ./
 ckitchen --interval_orders 0.5 --max_courier_time 6 --min_courier_time 2 --overflow_decay_modifier 2 --normal_decay 1
 
 ```
