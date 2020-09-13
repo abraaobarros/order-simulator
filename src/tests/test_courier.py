@@ -3,7 +3,7 @@ import unittest
 from src.helpers import get_initial_orders
 from src.courier import Courier
 from src.ckitchen import CKitchen
-import src.order import Order
+from src.order import Order
 
 
 class CourierTestCase(unittest.TestCase):

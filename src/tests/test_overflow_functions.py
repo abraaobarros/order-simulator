@@ -74,7 +74,7 @@ class OverflowFunctionsTestCase(unittest.TestCase):
         coordinator.get(order_to_stay)
         coordinator.put(order_full_overflow)
         self.assertEqual(coordinator.where_is(order_full_overflow), 'overflow')
-        self.assertEqual(coordinator.where_is(order_to_move), 'frozen')
+        self.assertEqual(coordinator.where_is(order_to_move), 'missing')
 
 
 if __name__ == "__main__":

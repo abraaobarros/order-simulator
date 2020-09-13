@@ -1,6 +1,5 @@
 import simpy
 import random
-from src.logger import t, Action
 from src.order import Order
 from src.ckitchen import *
 

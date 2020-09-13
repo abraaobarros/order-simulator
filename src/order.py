@@ -1,7 +1,5 @@
 import simpy
 
-from src.logger import t, Action
-
 
 class Order(simpy.Event):
     def __init__(self, json, env=None):

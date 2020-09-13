@@ -1,5 +1,4 @@
 import simpy
-from src.logger import t, Action
 from src.overflow_functions import *
 
 
@@ -54,7 +53,7 @@ class OverflowShelf(SimpleShelf):
 
 
 class ShelvesCoordinator(simpy.Event):
-    def __init__(self, env, overflow_capacity=10, overflowFullFunc=move_available_shelf_full_overflow):
+    def __init__(self, env, overflow_capacity=10, overflowFullFunc=move_and_discard_ramdomly_full_overflow):
         super()
         self.env = env
         self.shelves = {}
